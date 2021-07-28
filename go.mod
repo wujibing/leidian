@@ -1,1 +1,1 @@
-module "leidian"
+module github.com/wujibing/leidian
