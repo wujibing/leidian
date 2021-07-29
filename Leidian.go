@@ -15,6 +15,7 @@ import (
 var (
 	leidianPath string
 	consolePath string
+	ldPath      string
 	simulators  = make(map[int]*Simulator)
 	lock        sync.RWMutex
 )
@@ -22,7 +23,7 @@ var (
 func SetPath(path string) {
 	leidianPath = path
 	consolePath = filepath.Join(path, "ldconsole.exe")
-
+	ldPath = filepath.Join(path, "ld.exe")
 }
 
 // 运行模拟器
@@ -84,6 +85,33 @@ func RunApp(index int, packageName string) error {
 	return err
 }
 
+//获取android的包名
+func GetPackages(index int) (*Packages, error) {
+	reader, err := runLd("-s", fmt.Sprintf("%d", index), "pm list packages")
+	if err != nil {
+		return nil, err
+	}
+	return NewPackages(reader)
+}
+
+//获取最顶层运行包名
+func GetTopPackageName(index int) string {
+	reader, err := runLd("-s", fmt.Sprintf("%d", index), "dumpsys activity top")
+	if err != nil {
+		return ""
+	}
+	rd := reader.(*bytes.Buffer)
+	lines, err := rd.ReadBytes('\n')
+	if err != nil {
+		return ""
+	}
+	fields := strings.Fields(string(lines))
+	if len(fields) == 3 {
+		return fields[1]
+	} else {
+		return ""
+	}
+}
 func GetSimulator(index int) *Simulator {
 	lock.RLock()
 	defer lock.RUnlock()
@@ -124,7 +152,15 @@ func LoadSimulator() error {
 }
 
 func run(arg ...string) (io.Reader, error) {
-	cmd := exec.Command(consolePath, arg...)
+	return runByPath(consolePath, arg...)
+}
+
+func runLd(arg ...string) (io.Reader, error) {
+	return runByPath(ldPath, arg...)
+}
+
+func runByPath(path string, arg ...string) (io.Reader, error) {
+	cmd := exec.Command(path, arg...)
 	buf := new(bytes.Buffer)
 	cmd.Stdout = buf
 	err := cmd.Start()

@@ -21,6 +21,11 @@ func TestGetSimulator(t *testing.T) {
 	t.Log(GetSimulator(0))
 }
 
+func TestGetTopPackageName(t *testing.T) {
+	SetPath("F:\\LDPlayer\\LDPlayer64")
+	t.Log(GetTopPackageName(0))
+}
+
 func TestLaunch(t *testing.T) {
 	SetPath("F:\\LDPlayer\\LDPlayer64")
 	Backup(0, "E:\\project\\golang\\gua\\douluo\\bin\\back.ldbk")
@@ -34,4 +39,14 @@ func TestSort(t *testing.T) {
 func TestCopy(t *testing.T) {
 	SetPath("F:\\LDPlayer\\LDPlayer64")
 	Copy(0)
+}
+
+func TestGetPackages(t *testing.T) {
+	SetPath("F:\\LDPlayer\\LDPlayer64")
+	packages, err := GetPackages(0)
+	if err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(packages.Find("com.sy.dldlhsdj.azt"))
+	}
 }
