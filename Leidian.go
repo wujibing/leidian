@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"os/exec"
 	"path/filepath"
 	"strconv"
@@ -64,7 +63,7 @@ func Restore(index int, file string) {
 
 //备份
 func Backup(index int, file string) {
-	run("backup ", "--index", fmt.Sprintf("%d", index), "--file", file)
+	run("backup", "--index", fmt.Sprintf("%d", index), "--file", file)
 }
 
 func Modify(index int, values ...string) {
@@ -125,7 +124,6 @@ func LoadSimulator() error {
 }
 
 func run(arg ...string) (io.Reader, error) {
-	log.Println(consolePath, arg)
 	cmd := exec.Command(consolePath, arg...)
 	buf := new(bytes.Buffer)
 	cmd.Stdout = buf

@@ -23,9 +23,7 @@ func TestGetSimulator(t *testing.T) {
 
 func TestLaunch(t *testing.T) {
 	SetPath("F:\\LDPlayer\\LDPlayer64")
-	Launch(1)
-	LoadSimulator()
-	t.Log(GetSimulator(1))
+	Backup(0, "E:\\project\\golang\\gua\\douluo\\bin\\back.ldbk")
 }
 
 func TestSort(t *testing.T) {
