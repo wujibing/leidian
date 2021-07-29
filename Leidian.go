@@ -61,6 +61,12 @@ func Sort() {
 func Restore(index int, file string) {
 	run("restore", "--index", fmt.Sprintf("%d", index), "--file", file)
 }
+
+//备份
+func Backup(index int, file string) {
+	run("backup ", "--index", fmt.Sprintf("%d", index), "--file", file)
+}
+
 func Modify(index int, values ...string) {
 	newValues := []string{"modify", "--index", fmt.Sprintf("%d", index)}
 	newValues = append(newValues, values...)
