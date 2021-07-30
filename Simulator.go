@@ -2,6 +2,7 @@ package leidian
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -67,4 +68,8 @@ func (s *Simulator) InstallApp(ctx context.Context, packageName, filename string
 
 func (s *Simulator) KillApp(packageName string) {
 	KillApp(s.Index, packageName)
+}
+
+func (s *Simulator) DownCpu(rate string) {
+	run("downcpu", "--index", fmt.Sprintf("%d", s.Index), "--rate", rate)
 }
